@@ -58,8 +58,6 @@ const Blogs = ({
     });
   };
 
-  console.log(pagination);
-
   return (
     <Layout title="Blogs">
       <div className="flex flex-col gap-4">
