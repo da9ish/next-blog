@@ -1,23 +1,23 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 import BlogCard from "../components/blog/BlogCard";
 import Layout from "../components/Layout";
-import { Post } from "../interfaces";
+import { Category, Pagination, Post } from "../interfaces";
 
 type Props = {
   initialPosts: Post[];
-  initialCategories: any[];
-  initialPagination: any;
+  initialCategories: Category[];
+  initialPagination: Pagination;
 };
 
 export async function getServerSideProps() {
-  const res = await axios.get("http://localhost:3000/api/blogs");
+  const res = await fetch("http://localhost:3000/api/blogs");
+  const data = await res.json();
   return {
     props: {
-      initialPosts: res.data.posts,
-      initialCategories: res.data.categories,
-      initialPagination: res.data.pagination,
+      initialPosts: data.posts,
+      initialCategories: data.categories,
+      initialPagination: data.pagination,
     },
   };
 }
@@ -34,22 +34,24 @@ const Blogs = ({
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get(
+      const res = await fetch(
         `http://localhost:3000/api/blogs?page=1&search=${search}&category=${category}`
       );
-      setPosts(res.data.posts);
-      setPagination(res.data.pagination);
+      const data = await res.json();
+      setPosts(data.posts);
+      setPagination(data.pagination);
     };
 
     fetchPosts();
   }, [search, category]);
 
   const handlePageChange = async (page: number) => {
-    const res = await axios.get(
+    const res = await fetch(
       `http://localhost:3000/api/blogs?page=${page}&search=${search}&category=${category}`
     );
-    setPosts(res.data.posts);
-    setPagination(res.data.pagination);
+    const data = await res.json();
+    setPosts(data.posts);
+    setPagination(data.pagination);
 
     // Scroll back to the top of the page
     window.scrollTo({

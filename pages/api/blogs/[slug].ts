@@ -8,13 +8,19 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
 
     // Validate data
     if (!Array.isArray(data.posts)) {
-      throw new Error("Cannot find post data");
+      res.status(404).json({
+        statusCode: 404,
+        message: "Cannot find post data",
+      });
     }
 
     const post = data.posts.find((post) => post.slug === slug);
 
     if (!post) {
-      throw new Error(`Cannot find post with slug ${slug}`);
+      res.status(404).json({
+        statusCode: 404,
+        message: `Cannot find post with slug ${slug}`,
+      });
     }
 
     res.status(200).json({

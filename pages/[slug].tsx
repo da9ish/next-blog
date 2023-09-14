@@ -48,26 +48,42 @@ const Blog: React.FC<Props> = ({ post, categories = [] }) => {
 };
 
 export async function getStaticPaths() {
-  const res = await fetch("http://localhost:3000/api/blogs?perPage=100");
-  const { posts } = await res.json();
+  try {
+    const res = await fetch("http://localhost:3000/api/blogs?perPage=100");
+    const { posts } = await res.json();
 
-  const paths = posts.map((post: Post) => ({
-    params: { slug: post.slug },
-  }));
+    const paths = posts.map((post: Post) => ({
+      params: { slug: post.slug },
+    }));
 
-  return { paths, fallback: false };
+    return { paths, fallback: false };
+  } catch (err) {
+    return { paths: [], fallback: false };
+  }
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const res = await fetch(`http://localhost:3000/api/blogs/${params.slug}`);
-  const data = await res.json();
+  try {
+    const res = await fetch(`http://localhost:3000/api/blogs/${params.slug}`);
+    const data = await res.json();
 
-  return {
-    props: {
-      post: data.post,
-      categories: data.categories,
-    },
-  };
+    if (!data.post) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: {
+        post: data.post,
+        categories: data.categories,
+      },
+    };
+  } catch (err) {
+    return {
+      notFound: true,
+    };
+  }
 }
 
 export default Blog;

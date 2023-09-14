@@ -5,11 +5,15 @@ import { PostResponse } from "../../../interfaces";
 
 const handler = (req: NextApiRequest, res: NextApiResponse<PostResponse>) => {
   try {
-    const { search = "", category = null, page = 1, perPage = 10 } = req.query;
+    const { search = "", category = null, page = 1, perPage = 8 } = req.query;
 
     // Validate data
     if (!Array.isArray(data.posts) || !Array.isArray(data.categories)) {
-      throw new Error("Cannot find post or category data");
+      res.status(404).json({
+        statusCode: 404,
+        message: "Cannot find post or category data",
+      });
+      // throw new Error("Cannot find post or category data");
     }
 
     let filteredPosts = [...data.posts];
