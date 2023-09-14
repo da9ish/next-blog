@@ -7,32 +7,27 @@ const handler = (req: NextApiRequest, res: NextApiResponse<PostResponse>) => {
   try {
     const { search = "", category = null, page = 1, perPage = 8 } = req.query;
 
-    // Validate data
     if (!Array.isArray(data.posts) || !Array.isArray(data.categories)) {
       res.status(404).json({
         statusCode: 404,
         message: "Cannot find post or category data",
       });
-      // throw new Error("Cannot find post or category data");
     }
 
     let filteredPosts = [...data.posts];
 
-    // Implement search by title
     if (search) {
       filteredPosts = filteredPosts.filter((post) =>
         post.title.toLowerCase().includes(String(search).toLowerCase())
       );
     }
 
-    // Implement filter by category
     if (category) {
       filteredPosts = filteredPosts.filter((post) =>
         post.categories.includes(Number(category))
       );
     }
 
-    // Implement pagination
     const totalCount = filteredPosts.length;
     const startIndex = (Number(page) - 1) * Number(perPage);
     const endIndex = startIndex + Number(perPage);

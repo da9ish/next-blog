@@ -49,7 +49,9 @@ const Blog: React.FC<Props> = ({ post, categories = [] }) => {
 
 export async function getStaticPaths() {
   try {
-    const res = await fetch("http://localhost:3000/api/blogs?perPage=100");
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_HOST}/api/blogs?perPage=100`
+    );
     const { posts } = await res.json();
 
     const paths = posts.map((post: Post) => ({
@@ -64,7 +66,9 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
   try {
-    const res = await fetch(`http://localhost:3000/api/blogs/${params.slug}`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_HOST}/api/blogs/${params.slug}`
+    );
     const data = await res.json();
 
     if (!data.post) {

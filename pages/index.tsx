@@ -11,7 +11,7 @@ type Props = {
 };
 
 export async function getServerSideProps() {
-  const res = await fetch("http://localhost:3000/api/blogs");
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/blogs`);
   const data = await res.json();
   return {
     props: {
@@ -35,7 +35,7 @@ const Blogs = ({
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await fetch(
-        `http://localhost:3000/api/blogs?page=1&search=${search}&category=${category}`
+        `${process.env.NEXT_PUBLIC_API_HOST}/api/blogs?page=1&search=${search}&category=${category}`
       );
       const data = await res.json();
       setPosts(data.posts);
@@ -47,13 +47,12 @@ const Blogs = ({
 
   const handlePageChange = async (page: number) => {
     const res = await fetch(
-      `http://localhost:3000/api/blogs?page=${page}&search=${search}&category=${category}`
+      `${process.env.NEXT_PUBLIC_API_HOST}/api/blogs?page=${page}&search=${search}&category=${category}`
     );
     const data = await res.json();
     setPosts(data.posts);
     setPagination(data.pagination);
 
-    // Scroll back to the top of the page
     window.scrollTo({
       top: 0,
       behavior: "smooth",

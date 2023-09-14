@@ -6,7 +6,6 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { slug } = req.query;
 
-    // Validate data
     if (!Array.isArray(data.posts)) {
       res.status(404).json({
         statusCode: 404,
